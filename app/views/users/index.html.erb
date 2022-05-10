@@ -1,1 +1,6 @@
-<h1>home of users posts</h1>
+<% @users.each do |user|%>
+    <div class="user">
+        <%= link_to user.name, user_path(user.id) %>
+        <p>Number of Posts: <%= user.posts.count%></p>
+    </div>
+<%end%>

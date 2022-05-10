@@ -1,1 +1,8 @@
-<h1> this is a list of posts of a given user </h1>
+<% @posts.each do |post|%>
+    <div class="post">
+        <h3><%= link_to post.title, {:action=> 'show', :id => post.id} %></h3>
+        <p><%= post.text %></p>
+        <p>Comments: <%= post.comments.count %></p>
+        <p>Likes: <%= post.likes.count %></p>
+    </div>
+<%end%>

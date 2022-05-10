@@ -6,13 +6,15 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-first_user = User.create(name: 'Tom', photo: 'https://unsplash.com/photos/F_-0BxGuVvo', bio: 'Teacher from Mexico.')
-second_user = User.create(name: 'Lilly', photo: 'https://unsplash.com/photos/F_-0BxGuVvo', bio: 'Teacher from Poland.')
+User.create(name: 'Tom', photo: 'https://unsplash.com/photos/F_-0BxGuVvo', bio: 'Teacher from Mexico.')
+User.create(name: 'Lilly', photo: 'https://unsplash.com/photos/F_-0BxGuVvo', bio: 'Teacher from Poland.')
 
 first_post = Post.create(author_id:1 , title: 'Hello, hach', text: 'This is my first post')
 second_post = Post.create(author_id:2 , title: 'Hello, victor ', text: 'This is my second post')
 third_post = Post.create(author_id:1 , title: 'Hello, hach ', text: 'This is my third post')
 fourth_post = Post.create(author_id:2 , title: 'Hello, victor', text: 'This is my fourth post')
+fifth_post = Post.create(author_id:2 , title: 'Hello, victor', text: 'This is my fourth post')
+sixth_post = Post.create(author_id:2 , title: 'Hello, victor', text: 'This is my fourth post')
 
 Comment.create(post: first_post, author_id: 1, text: 'Wonderful post' )
 Comment.create(post: second_post, author_id: 2, text: 'I enjoyed second post' )
