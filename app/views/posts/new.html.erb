@@ -1,0 +1,12 @@
+<%= form_with model: @post, url: user_posts_path do |p| %>
+    <div>
+        <%= p.label :Title %>
+        <%= p.text_field :title, placeholder: "Title", required: true %>
+    </div>
+    <div>
+        <%= p.text_area :Text, placeholder: "Type here...", required: true %>
+    </div>
+    <div>
+        <%= p.submit "Post" %>
+    </div>
+<% end %>
