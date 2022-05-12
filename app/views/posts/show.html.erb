@@ -2,6 +2,10 @@
 <p><%= @post.text %></p>
 <p>Comments: <%= @post.comments.count %></p>
 <p>Likes: <%= @post.likes.count %></p>
+<%= form_with model:[@post, @post.likes.new] do |f|%>
+    <%= f.submit "Like" , data: {disable_with: "Loading..."}, class: "likes-btn" %>
+<%end%>
+<p><%= link_to 'Add comment', new_post_comment_path(@post, @comment)%></p>
 <h2>Comments</h2>
 <% @post.recent_comments.each do |comment| %>
     <div class="comment">
