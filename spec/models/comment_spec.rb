@@ -10,8 +10,8 @@ RSpec.describe Comment, type: :model do
   end
   subject do
     described_class.new(id: 1,
-                        author: author,
-                        post: post,
+                        author:,
+                        post:,
                         text: 'Wow!! I like the post',
                         created_at: Time.now,
                         updated_at: Time.now)

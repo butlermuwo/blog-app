@@ -9,7 +9,7 @@ RSpec.describe Post, type: :model do
                            text: 'The following are the ten JavaScript best programming practices every should know.',
                            comments_count: 1,
                            likes_count: 2,
-                           author: author,
+                           author:,
                            id: 1,
                            created_at: Time.now,
                            updated_at: Time.now)
@@ -47,14 +47,14 @@ RSpec.describe Post, type: :model do
   describe 'methods' do
     it 'most recent comments must be five' do
       6.times do
-        subject.comments.create(text: 'So inspiring!!', author: author)
+        subject.comments.create(text: 'So inspiring!!', author:)
       end
       @recent_comments = subject.most_recent_comments
       expect(@recent_comments.size).to eq(5)
     end
 
     it 'increments the number of posts on author' do
-      author.posts.create(title: 'Inspire', text: 'So inspiring!!', author: author)
+      author.posts.create(title: 'Inspire', text: 'So inspiring!!', author:)
       expect(author.posts_count).to eq(2)
     end
   end

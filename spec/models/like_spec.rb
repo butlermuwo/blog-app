@@ -10,8 +10,8 @@ RSpec.describe Like, type: :model do
   end
   subject do
     described_class.new(id: 1,
-                        author: author,
-                        post: post,
+                        author:,
+                        post:,
                         created_at: Time.now,
                         updated_at: Time.now)
   end
