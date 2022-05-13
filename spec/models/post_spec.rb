@@ -1,56 +1,61 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  describe 'For the Post model' do
-    before(:each) do
-      @user = User.new(name: 'John', bio: 'Teacher from Dubai', posts_counter: 0)
-      @post = Post.new(author: @user, title: 'Test', text: 'testing', likes_counter: 7, comments_counter: 5)
+  let(:author) do
+    User.create(name: 'Butler', id: 1)
+  end
+  subject do
+    described_class.create(title: 'the 10 JS best practices',
+                           text: 'The following are the ten JavaScript best programming practices every should know.',
+                           comments_count: 1,
+                           likes_count: 2,
+                           author: author,
+                           id: 1,
+                           created_at: Time.now,
+                           updated_at: Time.now)
+  end
+
+  describe 'validations' do
+    it 'is valid with valid attributes' do
+      expect(subject).to be_valid
+    end
+    it 'is not valid without a title' do
+      subject.title = nil
+      expect(subject).to_not be_valid
+    end
+    it 'is not valid with title length greater than 250' do
+      expect(subject.title.length).to be_between(1, 250)
     end
 
-    before { @post.save }
-
-    it 'if there is title' do
-      @post.title = true
-      expect(@post).to be_valid
+    it 'is not valid without valid comments_count and likes_count attribute' do
+      subject.comments_count = 'one'
+      subject.likes_count = 'one'
+      expect(subject).to_not be_valid
     end
 
-    it 'if there is max 250 characters' do
-      @post.title = 'Testing'
-      expect(@post).to be_valid
+    it 'is not valid without valid comments_count and likes_count integer attribute' do
+      expect(subject.comments_count).to be >= 0
+      expect(subject.likes_count).to be >= 0
+    end
+  end
+
+  describe 'Associations' do
+    it { should have_many(:comments) }
+    it { should have_many(:likes) }
+  end
+
+  describe 'methods' do
+    it 'most recent comments must be five' do
+      6.times do
+        subject.comments.create(text: 'So inspiring!!', author: author)
+      end
+      @recent_comments = subject.most_recent_comments
+      expect(@recent_comments.size).to eq(5)
     end
 
-    it 'if likes counter is integer' do
-      @post.likes_counter = 5
-      expect(@post).to be_valid
-    end
-
-    it 'if likes counter greater than or equal to zero' do
-      @post.likes_counter = -9
-      expect(@post).to_not be_valid
-    end
-
-    it 'if comments counter greater than or equal to zero.' do
-      @post.comments_counter = -5
-      expect(@post).to_not be_valid
-    end
-
-    it 'if comments counter is integer' do
-      @post.comments_counter = 8
-      expect(@post).to be_valid
-    end
-
-    it 'should return recent comments' do
-      @post.comments.create(text: 'test', author: @user)
-      expect(@post.recent_comments.first.text).to eq('test')
-    end
-
-    it 'should return recent comments' do
-      @post.comments.create(text: 'testing', author: @user)
-      @post.comments.create(text: 'testing1', author: @user)
-      @post.comments.create(text: 'testing2', author: @user)
-      @post.comments.create(text: 'testing3', author: @user)
-      @post.comments.create(text: 'testing4', author: @user)
-      expect(@post.recent_comments.length).to eq(5)
+    it 'increments the number of posts on author' do
+      author.posts.create(title: 'Inspire', text: 'So inspiring!!', author: author)
+      expect(author.posts_count).to eq(2)
     end
   end
 end

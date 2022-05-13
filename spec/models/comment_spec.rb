@@ -1,47 +1,47 @@
 require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
-  describe 'Validations For the Comment model' do
-    before(:each) do
-      @comment = Comment.new(text: 'One comment', author_id: 11, post_id: 32)
+  let(:author) do
+    User.new(name: 'Butler', id: 1)
+  end
+
+  let(:post) do
+    Post.new(title: 'the 10 JS best practices', id: 1)
+  end
+  subject do
+    described_class.new(id: 1,
+                        author: author,
+                        post: post,
+                        text: 'Wow!! I like the post',
+                        created_at: Time.now,
+                        updated_at: Time.now)
+  end
+
+  describe 'validations' do
+    it 'is valid with valid attributes' do
+      expect(subject).to be_valid
     end
 
-    before { @comment.save }
-
-    it 'if title is present' do
-      @comment.text = nil
-      expect(@comment).to_not be_valid
+    it 'is not valid without Author' do
+      subject.author = nil
+      expect(subject).to_not be_valid
     end
 
-    it 'if author_id is integer' do
-      @comment.author_id = 'W'
-      expect(@comment).to_not be_valid
+    it 'is not valid without Post' do
+      subject.post = nil
+      expect(subject).to_not be_valid
     end
+    it 'is not valid without text' do
+      subject.text = nil
+      expect(subject).to_not be_valid
+    end
+    it 'is not valid with text length greater than 400' do
+      expect(subject.text.length).to be_between(1, 400)
+    end
+  end
 
-    it 'if post_id is integer' do
-      @comment.post_id = 'Q'
-      expect(@comment).to_not be_valid
-    end
-
-    it 'if author_id is present' do
-      @comment.author_id = false
-      expect(@comment).to_not be_valid
-    end
-
-    it 'if post_id is present' do
-      @comment.post_id = nil
-      @comment.author_id = nil
-      expect(@comment).to_not be_valid
-    end
-
-    it 'if author_id is not present' do
-      @comment.author_id = nil
-      expect(@comment).to_not be_valid
-    end
-
-    it 'if post_id is not present' do
-      @comment.post_id = nil
-      expect(@comment).to_not be_valid
-    end
+  describe 'Associations' do
+    it { should belong_to(:author) }
+    it { should belong_to(:post) }
   end
 end
