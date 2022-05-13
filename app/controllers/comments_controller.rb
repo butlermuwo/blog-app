@@ -8,7 +8,8 @@ class CommentsController < ApplicationController
     @comment = @post.comments.new(text: comment_params[:text], author_id: current_user.id, post_id: @post.id)
 
     if @comment.save
-      redirect_to user_post_path(current_user.id, @post.id), notice: 'Comment created!'
+      redirect_to user_post_path(current_user.id, @post.id)
+      flash[:notice] = 'A comment has been created successfully'
     else
       render :new, status: :unprocessable_entity
     end
