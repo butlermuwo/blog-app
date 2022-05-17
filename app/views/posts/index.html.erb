@@ -3,7 +3,8 @@
 <% @posts.each do |post|%>
     <div class="post">
         <h3><%= link_to post.title, user_post_path(user_id: post.author_id, id: post.id) %></h3>
-        <p><%= post.text %></p>
+        <p><%= post.text %>
+        </p>
         <p>Comments: <%= post.comments.count %></p>
         <p>Likes: <%= post.likes.count %></p>
         <div class="comments">
