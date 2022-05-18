@@ -1,16 +1,30 @@
 <% console %>
 <h1><%= @post.title %></h1>
 <p><%= @post.text %></p>
+<%= button_to 'Delete Post', user_post_path(user_id: @post.author_id, post_id: @post.id), method: :delete if can? :destroy, @post %>
 <p>Comments: <%= @post.comments.count %></p>
 <p>Likes: <%= @post.likes.count %></p>
 <%= form_with model:[@post, @post.likes.new] do |f|%>
     <%= f.submit "Like" , data: {disable_with: "Loading..."}, class: "likes-btn" %>
 <%end%>
 <p><%= link_to 'Add comment', new_post_comment_path(@post, @comment)%></p>
-<h2>Comments</h2>
-<% @post.recent_comments.each do |comment| %>
-    <div class="comment">
-        <p><%= comment.text %></p>
-    </div>
+<% if @post.comments.blank? %>
+<p class="text-center">There are no comments currently available.</p>
+<% else %>
+<div class="card border-success p-5 " >
+  <div class="card-header bg-transparent border-success text-center">Comments</div>
+  <div class="card-body">
+  <% @post.comments.includes(:author).each do |comment| %>
+    <div class="show-comment">
+    <h4>
+    <%= comment.author.name %>
+    <%= button_to "Delete", post_comment_path(author_id: comment.author_id, post_id: comment.post_id,  id: comment.id), method: :delete, class: 'btn btn-danger btn-sm show-btn' if can? :destroy, comment %>
+    </h4>
+    <p class="card-text"><%= comment.text %></p>
+    <p class="card-text"><small class="text-muted">Posted <%= time_ago_in_words(comment.created_at)%> ago</small></p>
+   <% end %>
+   </div>
+  </div>
+</div>
 <% end %>
 

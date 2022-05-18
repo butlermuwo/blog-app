@@ -45,6 +45,8 @@ gem 'devise', '~> 4.8.1'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data'
 
+gem 'cancancan', '~> 3.3'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
 
