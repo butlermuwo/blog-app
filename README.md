@@ -36,6 +36,12 @@
 - Twitter: [@Butlermuwo](https://twitter.com/ButlerMuwo)
 - LinkedIn: [@Butlermuwo](https://www.linkedin.com/in/butlermuwo)
 
+👤 **Butler Shimaluwani**
+
+- GitHub: [@Butlermuwo](https://github.com/butlermuwo)
+- Twitter: [@Butlermuwo](https://twitter.com/ButlerMuwo)
+- LinkedIn: [@Butlermuwo](https://www.linkedin.com/in/butlermuwo)
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
