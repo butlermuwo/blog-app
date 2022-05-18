@@ -1,6 +1,7 @@
 <% console %>
 <h1><%= @post.title %></h1>
 <p><%= @post.text %></p>
+<%= button_to 'Delete Post', user_post_path(user_id: @post.author_id, post_id: @post.id), method: :delete if can? :destroy, @post %>
 <p>Comments: <%= @post.comments.count %></p>
 <p>Likes: <%= @post.likes.count %></p>
 <%= form_with model:[@post, @post.likes.new] do |f|%>
@@ -11,6 +12,7 @@
 <% @post.recent_comments.each do |comment| %>
     <div class="comment">
         <p><%= comment.text %></p>
+        <%= button_to 'Delete comment', post_comment_path(post_id: @post.id, comment_id: comment.id), method: :delete %>
     </div>
 <% end %>
 
