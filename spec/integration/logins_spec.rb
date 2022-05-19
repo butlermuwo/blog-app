@@ -1,38 +1,35 @@
 require 'rails_helper'
 
-RSpec.feature 'Tests for the Log in Page', type: :feature do
-  background { visit new_user_session_path }
-  scenario 'if there is form login' do
-    expect(page.has_field?('Email')).to be true
-    expect(page.has_field?('Password')).to be true
-    expect(page.has_button?('Log in')).to be true
+RSpec.feature 'Log in session', type: :feature do
+  before(:each) do
+    visit new_user_session_path
+  end
+  scenario 'can see the inputs' do
+    expect(page).to have_field('Email')
+    expect(page).to have_field('Password')
+    expect(page).to have_button('Log in')
   end
 
-  context 'Form Submission' do
-    scenario 'if can login without credentials' do
-      click_button 'Log in'
-      expect(page).to have_content 'Invalid Email or password.'
-    end
+  scenario 'submit without filling all inputs, raise error' do
+    fill_in('Email', with: nil)
+    fill_in('Password', with: nil)
+    click_button('Log in')
+    expect(page).to have_content('Invalid Email or password.')
+  end
 
-    scenario 'if credentials are wrong' do
-      within 'form' do
-        fill_in 'Email', with: 'gmail.com'
-        fill_in 'Password', with: 'secret'
-      end
-      click_button 'Log in'
-      expect(page).to have_content 'Invalid Email or password.'
-    end
+  scenario 'submit with incorrect data, raise error' do
+    fill_in('Email', with: 'manager@gmail.com')
+    fill_in('Password', with: 'manager123')
+    click_button('Log in')
+    expect(page).to have_content('Invalid Email or password.')
+  end
 
-    scenario 'if credentials are right' do
-      @user1 = User.create(name: 'John', photo: 'somephoto', bio: 'Teacher from Mexico.', email: 'john@gmail.com',
-                           password: 'johnsecret', confirmed_at: Time.now, posts_counter: 0, role: 'admin')
-
-      within 'form' do
-        fill_in 'Email', with: @user1.email
-        fill_in 'Password', with: @user1.password
-      end
-      click_button 'Log in'
-      expect(page).to have_content 'Signed in successfully'
-    end
+  scenario 'submit with correct data, redirect to root page' do
+    @user = User.create(name: 'test', bio: 'In charge of testing', email: 'user@example.com', password: 'password')
+    fill_in('Email', with: @user.email)
+    fill_in('Password', with: @user.password)
+    click_button('Log in')
+    expect(page).to have_current_path(users_path)
+    expect(page).to have_content('Signed in successfully')
   end
 end

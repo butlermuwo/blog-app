@@ -1,4 +1,3 @@
-<% console %>
 <h1><%= @post.title %></h1>
 <p><%= @post.text %></p>
 <%= button_to 'Delete Post', user_post_path(user_id: @post.author_id, post_id: @post.id), method: :delete if can? :destroy, @post %>
@@ -17,6 +16,7 @@
   <% @post.comments.includes(:author).each do |comment| %>
     <div class="show-comment">
     <h4>
+    <%= image_tag "https://nuwaay.com/wp-content/uploads/2022/01/default_256.png", class: "card-img-top" %>
     <%= comment.author.name %>
     <%= button_to "Delete", post_comment_path(author_id: comment.author_id, post_id: comment.post_id,  id: comment.id), method: :delete, class: 'btn btn-danger btn-sm show-btn' if can? :destroy, comment %>
     </h4>

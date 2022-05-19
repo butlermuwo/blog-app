@@ -1,52 +1,34 @@
 require 'rails_helper'
 
-RSpec.describe 'Posts show page', type: :feature do
+RSpec.feature 'post show page', type: :feature do
   before(:each) do
-    User.destroy_all
-    @user = User.create(name: 'Mwape', photo: 'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png', bio: 'Developer from Zambia',
-                        email: 'test@email.com', password: 'password', confirmed_at: Time.now, role: 'admin', posts_counter: 0)
-    @user1 = User.create(name: 'Lungu', photo: 'profile.jpg', bio: 'Developer from SA', email: 'test1@email.com',
-                         password: 'password', confirmed_at: Time.now)
-    Post.create(title: 'My title', text: 'My text', author_id: @user.id, likes_counter: 0, comments_counter: 0)
-    @comment = Comment.create(text: 'My first comment', author: User.first, post: Post.first)
-    @comment = Comment.create(text: 'My second comment', author: User.first, post: Post.first)
-    @like = Like.create(author_id: User.first.id, post_id: Post.first.id)
-
-    visit new_user_session_path
-    fill_in 'Email', with: 'test@email.com'
-    fill_in 'Password', with: 'password'
-    click_button 'Log in'
-    visit "/users/#{User.first.id}/posts/#{Post.first.id}"
+    img = 'https://randomuser.me/api/portraits/men/87.jpg'
+    @user = User.create(name: 'Bertrand', photo: img, bio: 'full stack developer', posts_count: '1',
+                        email: 'bertrand@example.com',
+                        password: 'password')
+    posts = ['post 1', 'post 2', 'post 3', 'post 4']
+    posts.each do |post|
+      @user.posts.create(title: post, text: 'this is the beginning')
+    end
+    @post = @user.posts.find_by(title: 'post 4')
+    @comment = Comment.new(text: 'Wow!!')
+    @comment.post = @post
+    @comment.author = @user
+    @comment.save
+    login_as(@user)
+    visit user_post_path(@user, @post)
   end
-
-  describe 'Specs for view posts#show' do
-    it 'Can see the posts title.' do
-      expect(page).to have_content 'My title'
-    end
-
-    it 'Can see who wrote the post' do
-      expect(page).to have_content 'Mwape'
-    end
-
-    it 'Can see how many comments it has' do
-      expect(page).to have_content 'Comments: 2'
-    end
-
-    it 'Can see how many likes it has' do
-      expect(page).to have_content 'Likes: 1'
-    end
-
-    it 'Can see the post body' do
-      expect(page).to have_content 'My text'
-    end
-
-    it 'Can see the username of each commentor' do
-      expect(page).to have_content 'Mwape'
-    end
-
-    it 'Can see the comment each commentor left' do
-      expect(page).to have_content 'My first comment'
-      expect(page).to have_content 'My second comment'
-    end
+  scenario 'can see the post author, title, text' do
+    expect(page).to have_content(@post.author.name)
+    expect(page).to have_content(@post.title)
+    expect(page).to have_content(@post.text)
+  end
+  scenario 'can see the number of comments and likes' do
+    expect(page).to have_content("Comments: #{@post.comments_count}")
+    expect(page).to have_content("Likes: #{@post.likes_count}")
+  end
+  scenario 'can see the first comment author and text on post' do
+    expect(page).to have_content(@comment.author.name)
+    expect(page).to have_content(@comment.text)
   end
 end
